@@ -22,8 +22,8 @@ const LAST_PAGE_STA = 3000;
 (async () => {
   try {
     const browser = await puppeteer.launch({
-      headless: false,
-      slowMo: 300,
+      headless: true,
+      slowMo: 100,
     });
     const page = await browser.newPage();
     //deprecated
@@ -61,28 +61,32 @@ const LAST_PAGE_STA = 3000;
 
     await page.waitFor(1000);
 
-    let firstload = false;
-
     setInterval(async () => {
-      if (firstload) {
-        firstload = false;
-        return;
-      }
-      // await page.reload(); reloads the same page loaded, can't use if topic got bumped
-      await page.goto(spamurl, { waitUntil: 'domcontentloaded' });
-      //anyway go to last page
-      //who posted last, me ?
-      const nicknames = page.$$('span.normalname>a');
-      if (nicknames[nicknames.length - 1].textContent === process.env.FORUM_USER) {
-        throw "last post is mine";
-      }
-      if (process.env.POST_MODE === 'listen') {
-        listenpost(page);
-        //console.log('dothen');
-      } else if (process.env.POST_MODE === 'night') {
-        nighttopic(page);
-      } else {
-        othertopics(page);
+      try {
+        // await page.reload(); reloads the same page loaded, can't use if topic got bumped
+        await page.goto(spamurl, { waitUntil: 'domcontentloaded' });
+        //anyway go to last page
+        //who posted last, me ?
+        const nicknames = await page.$$('span.normalname>a');
+        //console.log(nicknames);
+        const lastnick = await nicknames[nicknames.length - 1].getProperty('innerText');
+        // console.log(lastnick);
+        const lastnickvalue = lastnick._remoteObject.value;
+        // console.log(lastnickvalue)
+        if (lastnickvalue === process.env.FORUM_USER) {
+          throw { message: "last post was mine" };
+        }
+        // throw "gay";
+        if (process.env.POST_MODE === 'listen') {
+          listenpost(page);
+          //console.log('dothen');
+        } else if (process.env.POST_MODE === 'night') {
+          nighttopic(page);
+        } else {
+          othertopics(page);
+        }
+      } catch (err) {
+        console.error(err.message);
       }
     }, RELOAD_INTERVAL);
 
