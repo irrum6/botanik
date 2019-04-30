@@ -73,7 +73,7 @@ const LAST_PAGE_STA = 3000;
       //anyway go to last page
       //who posted last, me ?
       const nicknames = page.$$('span.normalname>a');
-      if (nicknames[nicknames.length - 1] === process.env.FORUM_USER) {
+      if (nicknames[nicknames.length - 1].textContent === process.env.FORUM_USER) {
         throw "last post is mine";
       }
       if (process.env.POST_MODE === 'listen') {
