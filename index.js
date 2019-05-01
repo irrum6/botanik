@@ -73,7 +73,8 @@ const LAST_PAGE_STA = 3000;
         // console.log(lastnick);
         const lastnickvalue = lastnick._remoteObject.value;
         // console.log(lastnickvalue)
-        if (lastnickvalue === process.env.FORUM_USER) {
+        //use lower case comparison to ensure sameness
+        if (lastnickvalue.toString().toLowerCase() === process.env.FORUM_USER.toString().toLowerCase()) {
           throw { message: "last post was mine" };
         }
         // throw "gay";
