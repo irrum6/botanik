@@ -1,14 +1,14 @@
 const fs = require('fs');
-const options = require('./options.json');
 //load data
-const data = require('./playlist.json');
-const controls = require('./playlist.control.json');
+const datadir = '../data';
+const data = require(`${datadir}/playlist.json`);
+const controls = require(`${datadir}/playlist.control.json`);
 //load modules
 const { post } = require('./topic');
 const { youtube } = require('./bbcodes');
 const { getbbtext } = require('./getbbtext');
 
-const listenvideo = (id) => {
+const listenvideo = (id, options) => {
     if (typeof id !== 'string') throw { message: "youtube: id is not a string" };
     if (id === "") throw { message: "youtube: id is empty" };
     const video = youtube(id);
@@ -18,14 +18,14 @@ const listenvideo = (id) => {
 };
 
 //makepost
-const listenpost = async (page) => {
+const listenpost = async (page, options) => {
     const currentLink = data.links[controls.currentIndex];
     if (currentLink.id === controls.lastUsedId) {
         console.log("no new music to post");
         return;
     }
     const id = currentLink.id;
-    let lv = listenvideo(id);
+    let lv = listenvideo(id, options);
     await post(page, lv);
     //icnrease index
     //change last used id
@@ -37,7 +37,7 @@ const listenpost = async (page) => {
     controls.lastUsedId = id;
     //write then to file
     const controlsnew = JSON.stringify(controls)
-    fs.writeFileSync('playlist.control.json', controlsnew);
+    fs.writeFileSync(`${datadir}/playlist.control.json`, controlsnew);
     return;
 };
 

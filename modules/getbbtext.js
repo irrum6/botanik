@@ -1,4 +1,3 @@
-// const options = require('./options.json');
 const { colored, font, bold, size } = require('./bbcodes');
 
 const getbbtext = (options) => {

@@ -16,6 +16,10 @@ const post = async (page, text) => {
     await page.focus('textarea');
     await page.type('textarea', text);
     await page.click('input[type=submit]');
+
+    const nd = new Date();
+    console.log(`post @${nd.getHours()}:${nd.getMinutes()}`);
+
     return;
 }
 

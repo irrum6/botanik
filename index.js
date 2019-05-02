@@ -10,18 +10,23 @@ const selectors = {
   hide: 'input[name="Privacy"]',
   submit: 'input[name="submit"]'
 };
-
-const { listenpost } = require('./listen');
-const { nighttopic } = require('./night');
-const { othertopics } = require('./other');
-const { facenapalm } = require('./facenapalm');
-
+//mods
+const { listenpost } = require('./modules/listen');
+const { nighttopic } = require('./modules/night');
+const { othertopics } = require('./modules/other');
+const { facenapalm } = require('./modules/facenapalm');
+//options
+const options = require('./options.json');
+//
 const RELOAD_INTERVAL = 180000;
 const BASE_URL = 'https://forum.ge/';
 const LAST_PAGE_STA = 3000;
 
 (async () => {
   try {
+    const nd = new Date();
+    console.log(`start @${nd.getHours()}:${nd.getMinutes()}`);
+
     const browser = await puppeteer.launch({
       headless: true,
       slowMo: 100,
@@ -36,7 +41,6 @@ const LAST_PAGE_STA = 3000;
     await page.goto(`${BASE_URL}?act=Login&CODE=00`, { waitUntil: 'domcontentloaded' });;
 
     await page.waitFor(1000);
-
     await page.waitFor(selectors.user);
     await page.focus(selectors.user);
     await page.type(selectors.user, process.env.FORUM_USER);
@@ -48,18 +52,11 @@ const LAST_PAGE_STA = 3000;
     await page.waitFor(selectors.hide);
     await page.click(selectors.hide);
 
-    // await page.screenshot({ path: 'login.png' });
     await page.waitFor(selectors.submit);
     await page.click(selectors.submit);
-    // await page.screenshot({ path: 'login_success.png' });
-    //after successful login
     //take me to the topic we want to spam
-    //consider there are barely a topic with more than 100 pages
-    //use 3000 for safety
-    //use this hack to automatically load last page
     const spamurl = `${BASE_URL}?showtopic=${process.env.TOPIC_TO_SPAM}&st=${LAST_PAGE_STA}`;
     await page.goto(spamurl, { waitUntil: 'domcontentloaded' });
-
     await page.waitFor(1000);
 
     setInterval(async () => {
@@ -83,14 +80,14 @@ const LAST_PAGE_STA = 3000;
         }
         // throw "gay";
         if (process.env.POST_MODE === 'listen') {
-          listenpost(page);
+          listenpost(page, options);
           //console.log('dothen');
         } else if (process.env.POST_MODE === 'night') {
-          nighttopic(page);
+          nighttopic(page, options);
         } else if (process.env.POST_MODE === 'facenapalm') {
-          facenapalm(page, lana);
+          facenapalm(page, lana, options);
         } else {
-          othertopics(page);
+          othertopics(page, options);
         }
       } catch (err) {
         console.error(err.message);

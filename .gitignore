@@ -1,4 +1,5 @@
 node_modules
 playlist.copy.json
 playlist.control.copy.json
+options.copy.json
 .envcopy
