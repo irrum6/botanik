@@ -14,8 +14,9 @@ const selectors = {
 const { listenpost } = require('./listen');
 const { nighttopic } = require('./night');
 const { othertopics } = require('./other');
+const { facenapalm } = require('./facenapalm');
 
-const RELOAD_INTERVAL = 300000;
+const RELOAD_INTERVAL = 180000;
 const BASE_URL = 'https://forum.ge/';
 const LAST_PAGE_STA = 3000;
 
@@ -74,8 +75,11 @@ const LAST_PAGE_STA = 3000;
         const lastnickvalue = lastnick._remoteObject.value;
         // console.log(lastnickvalue)
         //use lower case comparison to ensure sameness
-        if (lastnickvalue.toString().toLowerCase() === process.env.FORUM_USER.toString().toLowerCase()) {
-          throw { message: "last post was mine" };
+        const lana = lastnickvalue.toString().toLowerCase();
+        const fuser = process.env.FORUM_USER.toString().toLowerCase();
+        if (lana === fuser) {
+          const nd = new Date();
+          throw { message: `last post was mine @${nd.getHours()}::${nd.getMinutes()}` };
         }
         // throw "gay";
         if (process.env.POST_MODE === 'listen') {
@@ -83,6 +87,8 @@ const LAST_PAGE_STA = 3000;
           //console.log('dothen');
         } else if (process.env.POST_MODE === 'night') {
           nighttopic(page);
+        } else if (process.env.POST_MODE === 'facenapalm') {
+          facenapalm(page, lana);
         } else {
           othertopics(page);
         }

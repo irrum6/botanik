@@ -1,4 +1,5 @@
 const fs = require('fs');
+const options = require('./options.json');
 //load data
 const data = require('./playlist.json');
 const controls = require('./playlist.control.json');
@@ -11,7 +12,7 @@ const listenvideo = (id) => {
     if (typeof id !== 'string') throw { message: "youtube: id is not a string" };
     if (id === "") throw { message: "youtube: id is empty" };
     const video = youtube(id);
-    let text = getbbtext();
+    let text = getbbtext(options);
     //return
     return video.concat("\n").concat(text);
 };

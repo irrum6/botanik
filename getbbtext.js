@@ -1,7 +1,7 @@
-const options = require('./options.json');
+// const options = require('./options.json');
 const { colored, font, bold, size } = require('./bbcodes');
 
-const getbbtext = () => {
+const getbbtext = (options) => {
     if (typeof options.message !== "string") return "";
     if (options.message === "") return "";
     let text = options.message;
