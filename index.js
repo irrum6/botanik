@@ -11,10 +11,10 @@ const selectors = {
   submit: 'input[name="submit"]'
 };
 //mods
-const { listenpost } = require('./modules/listen');
-const { nighttopic } = require('./modules/night');
-const { othertopics } = require('./modules/other');
-const { facenapalm } = require('./modules/facenapalm');
+const { listenpost } = require('./mods/listen');
+const { nighttopic } = require('./mods/night');
+const { othertopics } = require('./mods/other');
+const { facenapalm } = require('./mods/facenapalm');
 //options
 const options = require('./options.json');
 //
@@ -28,7 +28,7 @@ const LAST_PAGE_STA = 3000;
     console.log(`start @${nd.getHours()}:${nd.getMinutes()}`);
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       slowMo: 100,
     });
     const page = await browser.newPage();
@@ -54,6 +54,8 @@ const LAST_PAGE_STA = 3000;
 
     await page.waitFor(selectors.submit);
     await page.click(selectors.submit);
+    //take some time
+    await page.waitFor(3000);
     //take me to the topic we want to spam
     const spamurl = `${BASE_URL}?showtopic=${process.env.TOPIC_TO_SPAM}&st=${LAST_PAGE_STA}`;
     await page.goto(spamurl, { waitUntil: 'domcontentloaded' });

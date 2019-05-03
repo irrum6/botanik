@@ -4,9 +4,9 @@ const datadir = '../data';
 const data = require(`${datadir}/playlist.json`);
 const controls = require(`${datadir}/playlist.control.json`);
 //load modules
-const { post } = require('./topic');
-const { youtube } = require('./bbcodes');
-const { getbbtext } = require('./getbbtext');
+const { post } = require('../modules/topic');
+const { youtube } = require('../modules/bbcodes');
+const { getbbtext } = require('../modules/getbbtext');
 
 const listenvideo = (id, options) => {
     if (typeof id !== 'string') throw { message: "youtube: id is not a string" };

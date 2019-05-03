@@ -1,5 +1,5 @@
-const { post } = require('./topic');
-const { getbbtext } = require('./getbbtext');
+const { post } = require('../modules/topic');
+const { getbbtext } = require('../modules/getbbtext');
 
 const othertopics = async (page, options) => {
     let text = getbbtext(options);
