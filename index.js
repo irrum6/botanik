@@ -28,7 +28,7 @@ const LAST_PAGE_STA = 3000;
     console.log(`start @${nd.getHours()}:${nd.getMinutes()}`);
 
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       slowMo: 100,
     });
     const page = await browser.newPage();

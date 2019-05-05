@@ -1,8 +1,8 @@
 {
-    "font": "Arial",
-    "size": 7,
-    "color": "Green",
-    "message": "aaa",
+    "font": "",
+    "size": null,
+    "color": "0",
+    "message": "0",
     "bold": true,
     "noformat": false
 }
