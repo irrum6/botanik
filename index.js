@@ -18,17 +18,25 @@ const { facenapalm } = require('./mods/facenapalm');
 //options
 const options = require('./options.json');
 //
-const RELOAD_INTERVAL = 180000;
+const RELOAD_INTERVAL = 205000;
 const BASE_URL = 'https://forum.ge/';
 const LAST_PAGE_STA = 3000;
 
+const timeStamp = () => {
+  const nd = new Date();
+
+  const h = String(nd.getHours()).padStart(2, '0');
+  const m = String(nd.getMinutes()).padStart(2, '0');
+  const s = String(nd.getSeconds()).padStart(2, '0');
+
+  return `${h}:${m}:${s}`;
+}
 (async () => {
   try {
-    const nd = new Date();
-    console.log(`start @${nd.getHours()}:${nd.getMinutes()}`);
+    console.log(`start @:${timeStamp()}`);
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: true,//false for debug
       slowMo: 100,
     });
     const page = await browser.newPage();
@@ -78,7 +86,7 @@ const LAST_PAGE_STA = 3000;
         const fuser = process.env.FORUM_USER.toString().toLowerCase();
         if (lana === fuser) {
           const nd = new Date();
-          throw { message: `last post was mine @${nd.getHours()}::${nd.getMinutes()}` };
+          throw { message: `last post was mine @${timeStamp()} ` };
         }
         // throw "gay";
         if (process.env.POST_MODE === 'listen') {
@@ -98,6 +106,6 @@ const LAST_PAGE_STA = 3000;
 
     // await browser.close();
   } catch (err) {
-    console.log(`error happened:${err.message}`);
+    console.log(`error happened: ${err.message} `);
   }
 })();
