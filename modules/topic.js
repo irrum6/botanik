@@ -1,5 +1,15 @@
 const GEO = 'input[name="geo"]';
 
+const timeStamp = () => {
+    const nd = new Date();
+
+    const h = String(nd.getHours()).padStart(2, '0');
+    const m = String(nd.getMinutes()).padStart(2, '0');
+    const s = String(nd.getSeconds()).padStart(2, '0');
+
+    return `${h}:${m}:${s}`;
+}
+
 const post = async (page, text) => {
     if (typeof text !== 'string') throw { message: "text not a string" };
     if (text.length < 31) {
@@ -17,8 +27,7 @@ const post = async (page, text) => {
     await page.type('textarea', text);
     await page.click('input[type=submit]');
 
-    const nd = new Date();
-    console.log(`post @${nd.getHours()}:${nd.getMinutes()}`);
+    console.log(`post @${timeStamp()}`);
 
     return;
 }
