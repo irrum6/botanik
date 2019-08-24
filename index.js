@@ -88,16 +88,11 @@ const timeStamp = () => {
           const nd = new Date();
           throw { message: `last post was mine @${timeStamp()} ` };
         }
-        // throw "gay";
-        if (process.env.POST_MODE === 'listen') {
-          listenpost(page, options);
-          //console.log('dothen');
-        } else if (process.env.POST_MODE === 'night') {
-          nighttopic(page, options);
-        } else if (process.env.POST_MODE === 'facenapalm') {
-          facenapalm(page, lana, options);
-        } else {
-          othertopics(page, options);
+        switch (process.env.POST_MODE) {
+          case 'listen': listenpost(page, options); break;
+          case 'night': nighttopic(page, options); break;
+          case 'facenapalm': facenapalm(page, options); break;
+          default: othertopics(page, options);
         }
       } catch (err) {
         console.error(err.message);
